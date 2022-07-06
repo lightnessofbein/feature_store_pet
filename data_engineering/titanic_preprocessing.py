@@ -1,4 +1,4 @@
-import yaml
+import yaml 
 import pandas as pd
 from os import path
 from sklearn.impute import SimpleImputer
@@ -37,7 +37,3 @@ if __name__ == '__main__':
                             output_path=config['output_path'],
                             timestamp=config['prod'][period]['timestamp'])
         print(f'{period} data has been ingested!')
-
-        
-
-
