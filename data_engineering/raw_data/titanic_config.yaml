@@ -1,0 +1,14 @@
+train:
+  path: data_engineering/raw_data/titanic_train.csv
+  timestamp: 2022-01-15 2:59:43.10
+
+prod:
+  march:
+    path: data_engineering/raw_data/titanic_prod_march.csv
+    timestamp: 2022-03-31 11:12:30
+
+  april:
+    path: data_engineering/raw_data/titanic_prod_april.csv
+    timestamp: 2022-04-30 11:11:50
+
+output_path: 'feast_feature_store/data/titanic_file_source.parquet'
