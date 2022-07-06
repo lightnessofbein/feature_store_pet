@@ -162,3 +162,5 @@ cython_debug/
 #CUSTOM
 # processed data is not needed, in contrast to raw
 feast_feature_store/data/*
+.vscode
+.DS_Store
