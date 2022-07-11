@@ -11,4 +11,4 @@ prod:
     path: data_engineering/raw_data/titanic_prod_april.csv
     timestamp: 2022-04-30 11:11:50
 
-output_path: 'feast_feature_store/data/titanic_file_source.parquet'
+output_path: 'feast_feature_store/data/titanic_file_source.csv'
