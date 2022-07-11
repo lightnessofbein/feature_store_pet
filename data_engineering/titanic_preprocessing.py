@@ -25,8 +25,8 @@ if __name__ == '__main__':
                              ],
                             verbose=True)
 
-    preprocess_raw_file(rawfile_path=config['train']['path'], 
-                        pipe=preproc_pipe, 
+    preprocess_raw_file(rawfile_path=config['train']['path'],
+                        pipe=preproc_pipe,
                         output_path=config['output_path'],
                         timestamp=config['train']['timestamp'])
     print('train data has been ingested!')
