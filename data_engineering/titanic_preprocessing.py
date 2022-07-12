@@ -2,7 +2,6 @@ import argparse
 import yaml
 import joblib
 import pandas as pd
-from os import listdir
 from sklearn.impute import SimpleImputer
 
 from sklearn.pipeline import Pipeline
@@ -10,7 +9,6 @@ from sklearn.preprocessing import OrdinalEncoder
 
 
 if __name__ == '__main__':
-    print(listdir())
     parser = argparse.ArgumentParser()
     parser.add_argument('--type', help='train or production processing')
     args = parser.parse_args()
