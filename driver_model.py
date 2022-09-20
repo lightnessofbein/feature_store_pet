@@ -108,7 +108,9 @@ class DriverModel:
         features_df = features_df.reindex(sorted(features_df.columns), axis=1)
 
         # Drop unnecessary columns
-        features_df = features_df[features_df.columns.drop("zipcode").drop("dob_ssn")]
+        features_df = features_df[
+            features_df.columns.drop("zipcode").drop("dob_ssn")
+        ]
 
         # Make prediction
         features_df["prediction"] = self.classifier.predict(features_df)
