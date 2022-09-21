@@ -10,13 +10,13 @@ services:
     container_name: feast_push_server
     build:
       context: .
-      dockerfile: feature_repo/Dockerfile
+      dockerfile: data_science_repo/feast_feature_store/Dockerfile
     ports:
       - "6567:6566"
     volumes:
       - type: bind
-        source: ./feature_repo/data/local_registry.db
-        target: /data/local_registry.db
+        source: ./feast_feature_store/data/registry.db
+        target: /data/registry.db
     links:
       - redis
 
@@ -24,12 +24,12 @@ services:
     container_name: feast_feature_server
     build:
       context: .
-      dockerfile: feature_repo/Dockerfile
+      dockerfile: data_science_repo/feast_feature_store/Dockerfile
     ports:
       - "6566:6566"
     volumes:
       - type: bind
-        source: ./feature_repo/data/local_registry.db
-        target: /data/local_registry.db
+        source: ./feast_feature_store/data/registry.db
+        target: /data/registry.db
     links:
       - redis
