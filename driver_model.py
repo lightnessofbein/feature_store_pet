@@ -54,7 +54,7 @@ class DriverModel:
             self.encoder = OrdinalEncoder()
 
         # Set up feature store
-        self.fs = feast.FeatureStore(repo_path="feast_feature_store")
+        self.fs = feast.FeatureStore(repo_path="data_science_repo/feast_feature_store")
 
     def train(self, loans):
         train_X, train_Y = self._get_training_features(loans)
@@ -63,9 +63,7 @@ class DriverModel:
         joblib.dump(self.classifier, self.model_filename)
 
     def _get_training_features(self, loans):
-        training_df = self.fs.get_historical_features(
-            entity_df=loans, features=self.feast_features
-        ).to_df()
+        training_df = self.fs.get_historical_features(entity_df=loans, features=self.feast_features).to_df()
 
         self._fit_ordinal_encoder(training_df)
         self._apply_ordinal_encoding(training_df)
@@ -88,9 +86,7 @@ class DriverModel:
         joblib.dump(self.encoder, self.encoder_filename)
 
     def _apply_ordinal_encoding(self, requests):
-        requests[self.categorical_features] = self.encoder.transform(
-            requests[self.categorical_features]
-        )
+        requests[self.categorical_features] = self.encoder.transform(requests[self.categorical_features])
 
     def predict(self, request):
         # Get online features from Feast
@@ -108,9 +104,7 @@ class DriverModel:
         features_df = features_df.reindex(sorted(features_df.columns), axis=1)
 
         # Drop unnecessary columns
-        features_df = features_df[
-            features_df.columns.drop("zipcode").drop("dob_ssn")
-        ]
+        features_df = features_df[features_df.columns.drop("zipcode").drop("dob_ssn")]
 
         # Make prediction
         features_df["prediction"] = self.classifier.predict(features_df)
