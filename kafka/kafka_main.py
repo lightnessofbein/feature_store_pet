@@ -1,5 +1,5 @@
 import json
-from time import sleep
+from datetime import datetime
 
 import pandas as pd
 from kafka import KafkaAdminClient, KafkaProducer
@@ -37,19 +37,17 @@ def create_stream(topic_name):
         pass
 
     print("Reading parquet")
-    df = pd.read_parquet("driver_stats_stream.parquet").sort_values(by="event_timestamp")
-    print("Emitting events")
+    df = pd.read_parquet("titanic_train_file_source.parquet").sort_values(by="event_timestamp")
+    df["event_timestamp"] = datetime(2022, 1, 15, 2, 59, 50)
     iteration = 1
     while True:
-        for row in df[["driver_id", "event_timestamp", "created", "conv_rate", "acc_rate"]].to_dict("records"):
+        for row in df[["PassengerId", "event_timestamp", "Pclass", "Fare"]].to_dict("records"):
             # Make event one more year recent to simulate fresher data
-            row["event_timestamp"] = (row["event_timestamp"] + pd.Timedelta(weeks=52 * iteration)).strftime(
+            row["event_timestamp"] = (row["event_timestamp"] + pd.Timedelta(weeks=52 + iteration)).strftime(
                 "%Y-%m-%d %H:%M:%S"
             )
-            row["created"] = row["created"].strftime("%Y-%m-%d %H:%M:%S")
             producer.send(topic_name, json.dumps(row).encode())
             print(row)
-            sleep(1.0)
         iteration += 1
 
 
