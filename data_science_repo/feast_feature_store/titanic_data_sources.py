@@ -1,8 +1,5 @@
-import os
 from feast import FileSource, PushSource
 
-
-KAFKA_BOOTSTRAP_SERVER = os.getenv("KAFKA_SERVER", "localhost:9092")
 
 titanic_file_source = FileSource(path="data/titanic_train_file_source.parquet", timestamp_field="dummy_timestamp")
 

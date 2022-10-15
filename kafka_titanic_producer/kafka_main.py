@@ -7,7 +7,7 @@ from kafka.admin import NewTopic
 import os
 
 BOOTSTRAP_SERVERS = [os.getenv("KAFKA_SERVER", "ERROR")]
-TOPIC = os.getenv("TOPIC", "drivers")
+TOPIC = os.getenv("TOPIC")
 
 
 def create_stream(topic_name):
@@ -35,15 +35,33 @@ def create_stream(topic_name):
     df = pd.read_parquet("titanic_train_file_source.parquet").sort_values(by="dummy_timestamp")
     df["dummy_timestamp"] = datetime(2022, 1, 15, 2, 59, 50)
     iteration = 1
-    for row in df[["PassengerId", "dummy_timestamp", "Pclass", "Fare"]].to_dict("records"):
+
+    cols_to_send = [
+        "PassengerId",
+        "Survived",
+        "Pclass",
+        "Name",
+        "Sex",
+        "Age",
+        "SibSp",
+        "Parch",
+        "Ticket",
+        "Fare",
+        "Cabin",
+        "Embarked",
+        "dummy_timestamp",
+    ]
+    for row in df[cols_to_send].to_dict("records"):
         # Make event one more year recent to simulate fresher data
         row["dummy_timestamp"] = (row["dummy_timestamp"] + pd.Timedelta(weeks=52 + iteration)).strftime(
             "%Y-%m-%d %H:%M:%S"
         )
+
+        row["PassengerId"] += 1000
         producer.send(topic_name, json.dumps(row).encode())
         print(row)
         iteration += 1
 
 
 if __name__ == "__main__":
-    create_stream("drivers")
+    create_stream(TOPIC)

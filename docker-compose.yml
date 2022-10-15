@@ -39,17 +39,6 @@ services:
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=broker:29092
       - KAFKA_CLUSTERS_0_ZOOKEEPER=kafka-zookeeper:2181
 
-  kafka-titanic-producer:
-    container_name: kafka-titanic-producer
-    build:
-      context: kafka_titanic_producer
-      dockerfile: Dockerfile
-    depends_on:
-      - broker
-    restart: on-failure
-    environment:
-      - KAFKA_SERVER=broker:29092
-
   redis:
     image: redis
     container_name: feast-redis
@@ -67,36 +56,6 @@ services:
     ports:
       - "8081:8081"
 
-
-# setup feature store
-  feast-push_server:
-    container_name: feast-push-server
-    build:
-      context: data_science_repo/feast_feature_store
-      dockerfile: Dockerfile
-    ports:
-      - "6567:6566"
-    volumes:
-      - type: bind
-        source: data_science_repo/feast_feature_store/data/registry.db
-        target: /data/registry.db
-    links:
-      - redis
-
-  feast-feature_server:
-    container_name: feast-feature-server
-    build:
-      context: data_science_repo/feast_feature_store/
-      dockerfile: Dockerfile
-    ports:
-      - "6566:6566"
-    volumes:
-      - type: bind
-        source: data_science_repo/feast_feature_store/data/registry.db
-        target: /data/registry.db
-    links:
-      - redis
-
   feast-kafka-titanic-consumer:
     container_name: feast-kafka-titanic-consumer
     build:
@@ -105,8 +64,20 @@ services:
     depends_on:
       - broker
       - redis
-      - feast-feature_server
       - kafka-titanic-producer
     restart: on-failure
     environment:
       - KAFKA_SERVER=broker:29092
+      - TOPIC=passengers
+
+  kafka-titanic-producer:
+    container_name: kafka-titanic-producer
+    build:
+      context: kafka_titanic_producer
+      dockerfile: Dockerfile
+    depends_on:
+      - broker
+    restart: on-failure
+    environment:
+      - KAFKA_SERVER=broker:29092
+      - TOPIC=passengers

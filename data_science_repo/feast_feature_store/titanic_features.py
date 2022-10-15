@@ -3,9 +3,9 @@
 from datetime import timedelta
 
 from feast import Entity, FeatureService, FeatureView, Field
-from feast.types import Int64
+from feast.types import Int32
 
-from titanic_data_sources import titanic_file_source
+from titanic_data_sources import driver_stats_push_source
 
 
 passenger_entity = Entity(name="passenger", join_keys=["PassengerId"])
@@ -15,20 +15,18 @@ passenger_stats = FeatureView(
     entities=[passenger_entity],
     ttl=timedelta(days=1),
     schema=[
-        Field(name="Survived", dtype=Int64),
-        Field(name="Pclass", dtype=Int64),
-        Field(name="Name", dtype=Int64),
-        Field(name="Sex", dtype=Int64),
-        Field(name="Age", dtype=Int64),
-        Field(name="SibSp", dtype=Int64),
-        Field(name="Parch", dtype=Int64),
-        Field(name="Ticket", dtype=Int64),
-        Field(name="Fare", dtype=Int64),
-        Field(name="Cabin", dtype=Int64),
-        Field(name="Embarked", dtype=Int64),
+        Field(name="Survived", dtype=Int32),
+        Field(name="Pclass", dtype=Int32),
+        Field(name="Name", dtype=Int32),
+        Field(name="Sex", dtype=Int32),
+        Field(name="Age", dtype=Int32),
+        Field(name="SibSp", dtype=Int32),
+        Field(name="Parch", dtype=Int32),
+        Field(name="Ticket", dtype=Int32),
+        Field(name="Fare", dtype=Int32),
     ],
     online=True,
-    source=titanic_file_source,
+    source=driver_stats_push_source,
     tags={},
 )
 # TODO: delete feature service? It is used to combine features.
