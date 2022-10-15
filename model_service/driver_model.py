@@ -54,7 +54,7 @@ class DriverModel:
             self.encoder = OrdinalEncoder()
 
         # Set up feature store
-        self.fs = feast.FeatureStore(repo_path="data_science_repo/feast_feature_store")
+        self.fs = feast.FeatureStore(repo_path="../data_science_repo/feast_feature_store")
 
     def train(self, loans):
         train_X, train_Y = self._get_training_features(loans)

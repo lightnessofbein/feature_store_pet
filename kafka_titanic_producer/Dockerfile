@@ -2,8 +2,7 @@ FROM python:3.8-slim
 
 # Copy app handler code
 COPY kafka_main.py kafka_main.py
-COPY driver_stats_stream.parquet driver_stats_stream.parquet
-COPY wait-for-it.sh wait-for-it.sh
+COPY titanic_train_file_source.parquet titanic_train_file_source.parquet
 
 # Install dependencies
 RUN pip3 install kafka-python==2.0.2
